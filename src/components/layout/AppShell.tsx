@@ -1,7 +1,8 @@
-import { useEffect, type ReactNode } from 'react'
+import { Suspense, useEffect, type ReactNode } from 'react'
 import { Outlet, useLocation } from 'react-router'
 import { precarregarPaginas } from '@/routes/paginas'
 import { Navbar } from '@/components/layout/Navbar'
+import { PageLoader } from '@/components/ui/PageLoader'
 import { useAuth } from '@/context/AuthContext'
 import { useToast } from '@/components/ui/Toast'
 import { MINUTOS_INATIVIDADE } from '@/config/constants'
@@ -37,7 +38,7 @@ export function AppShell({ children }: { children?: ReactNode }) {
           larga ? 'max-w-[100rem]' : 'max-w-6xl',
         )}
       >
-        {children ?? <Outlet />}
+        <Suspense fallback={<PageLoader />}>{children ?? <Outlet />}</Suspense>
       </main>
     </div>
   )

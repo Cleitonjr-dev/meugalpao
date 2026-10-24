@@ -20,7 +20,8 @@ import { useLimitesPeriodo } from '@/hooks/useLimitesPeriodo'
 import { chaves } from '@/lib/queryClient'
 import { formatCurrency } from '@/lib/utils'
 import { baixarCsv, gerarCsv, reaisCsv } from '@/utils/csv'
-import { dataLocalISO, formatarDataBR, formatarNumeroRecibo } from '@/utils/recibo'
+import { dataLocalISO, formatarDataBR } from '@/utils/data'
+import { formatarNumeroRecibo } from '@/utils/recibo'
 import type { PagamentoDoDia, UsuarioDoDia } from '@/types'
 
 const hora = (iso: string) =>

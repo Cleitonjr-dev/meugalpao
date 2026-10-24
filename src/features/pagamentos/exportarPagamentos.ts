@@ -2,7 +2,8 @@ import { FORMAS_PAGAMENTO_LABEL, STATUS_PAGAMENTO_LABEL } from '@/config/constan
 import { formatDateTime } from '@/lib/utils'
 import { baixarCsv, gerarCsv, reaisCsv } from '@/utils/csv'
 import { formatarCodigo } from '@/utils/codigo'
-import { formatarDataBR, formatarNumeroRecibo } from '@/utils/recibo'
+import { formatarDataBR } from '@/utils/data'
+import { formatarNumeroRecibo } from '@/utils/recibo'
 import type { LinhaPagamento } from '@/types'
 import { listarPagamentos, type ParametrosLista } from './pagamentos.queries'
 

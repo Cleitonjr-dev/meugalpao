@@ -5,7 +5,8 @@ import { FORMAS_PAGAMENTO_LABEL } from '@/config/constants'
 import { verificarRecibo } from '@/features/pagamentos/pagamentos.queries'
 import { formatCurrency } from '@/lib/utils'
 import { formatarCodigo } from '@/utils/codigo'
-import { formatarDataBR, formatarNumeroRecibo } from '@/utils/recibo'
+import { formatarDataBR } from '@/utils/data'
+import { formatarNumeroRecibo } from '@/utils/recibo'
 
 function Linha({ rotulo, valor }: { rotulo: string; valor: string }) {
   return (

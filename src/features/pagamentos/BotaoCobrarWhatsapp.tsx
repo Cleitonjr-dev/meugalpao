@@ -1,7 +1,7 @@
 import { MessageCircle } from 'lucide-react'
 import { Tooltip } from '@/components/ui/Tooltip'
 import { mensagemCobranca } from '@/utils/cobranca'
-import { whatsappLink } from '@/utils/recibo'
+import { whatsappLink } from '@/utils/cobranca'
 import type { Cliente } from '@/types'
 
 const CLASSE =

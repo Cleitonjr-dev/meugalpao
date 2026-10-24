@@ -34,3 +34,6 @@ dist-ssr
 test-results
 playwright-report
 coverage
+
+# PDFs de recibos gerados em teste manual
+*.pdf

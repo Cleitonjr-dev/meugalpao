@@ -22,7 +22,7 @@ import {
   type RascunhoItem,
 } from './itens'
 import { DIAS_PAGAMENTO, DIAS_PAGAMENTO_LABEL } from '@/config/constants'
-import { normalizarWhatsapp } from '@/utils/recibo'
+import { normalizarWhatsapp } from '@/utils/cobranca'
 import type { Cliente, DiaPagamento, ItemGuardado, PrecoGalpao, TipoItem } from '@/types'
 
 const FORM_ID = 'cliente-form'

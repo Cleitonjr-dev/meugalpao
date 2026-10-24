@@ -1,6 +1,6 @@
 import { formatCurrency } from '@/lib/utils'
 import { FORMAS_PAGAMENTO_LABEL } from '@/config/constants'
-import { formatarDataBR } from '@/utils/recibo'
+import { formatarDataBR } from '@/utils/data'
 import type { Pagamento } from '@/types'
 
 /** Tudo que um recibo (tela, impressão, PDF e WhatsApp) precisa, já formatado. */

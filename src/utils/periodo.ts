@@ -1,4 +1,5 @@
-import { dataLocalISO } from '@/utils/recibo'
+import type { DiaPagamento } from '@/types'
+import { dataLocalISO } from '@/utils/data'
 
 export type PresetPeriodo = 'hoje' | '7dias' | 'mes' | 'mes-passado'
 
@@ -58,4 +59,11 @@ export function limitesDoPeriodo(
   const umAnoAtras = dataLocalISO(new Date(hoje.getFullYear() - 1, hoje.getMonth(), hoje.getDate()))
   const min = primeiroPagamento ?? umAnoAtras
   return { min: min > max ? max : min, max }
+}
+
+export function diaSemanaKey(date: Date): DiaPagamento | null {
+  const d = date.getDay()
+  if (d === 3) return 'quarta'
+  if (d === 6) return 'sabado'
+  return null
 }

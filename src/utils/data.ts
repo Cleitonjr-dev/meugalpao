@@ -46,3 +46,19 @@ export function parseISO(valor: string): Date | null {
   if (!ano || !mes || !dia) return null
   return new Date(ano, mes - 1, dia)
 }
+
+const SOMENTE_DATA = /^(\d{4})-(\d{2})-(\d{2})$/
+
+/** Formata "YYYY-MM-DD" sem passar por fuso horário; timestamps usam o horário local. */
+export function formatarDataBR(value: string | Date): string {
+  if (typeof value === 'string') {
+    const m = SOMENTE_DATA.exec(value)
+    if (m) return `${m[3]}/${m[2]}/${m[1]}`
+  }
+  const date = typeof value === 'string' ? new Date(value) : value
+  return new Intl.DateTimeFormat('pt-BR', {
+    day: '2-digit',
+    month: '2-digit',
+    year: 'numeric',
+  }).format(date)
+}

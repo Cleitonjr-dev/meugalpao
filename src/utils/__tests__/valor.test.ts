@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import { formatarValorInput, parseValorBR, valorExibido } from '@/utils/valor'
-import { formatarDataBR, normalizarWhatsapp, whatsappLink } from '@/utils/recibo'
+import { formatarDataBR } from '@/utils/data'
+import { normalizarWhatsapp, whatsappLink } from '@/utils/cobranca'
 
 describe('parseValorBR', () => {
   it.each([

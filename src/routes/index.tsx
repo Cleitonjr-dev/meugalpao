@@ -1,4 +1,4 @@
-import { Suspense, type ReactNode } from 'react'
+import type { ReactNode } from 'react'
 import { Navigate, Route, Routes } from 'react-router'
 import { useAuth } from '@/context/AuthContext'
 import { AppShell } from '@/components/layout/AppShell'
@@ -58,62 +58,13 @@ export function AppRouter() {
           </ProtectedRoute>
         }
       >
-        <Route
-          path="/"
-          element={
-            <Suspense fallback={<PageLoader />}>
-              <DashboardPage />
-            </Suspense>
-          }
-        />
-        <Route
-          path="/clientes"
-          element={
-            <Suspense fallback={<PageLoader />}>
-              <ClientesPage />
-            </Suspense>
-          }
-        />
-        <Route
-          path="/pagamentos"
-          element={
-            <Suspense fallback={<PageLoader />}>
-              <PagamentosPage />
-            </Suspense>
-          }
-        />
-        <Route
-          path="/recibos"
-          element={
-            <Suspense fallback={<PageLoader />}>
-              <RecibosPage />
-            </Suspense>
-          }
-        />
-        <Route
-          path="/relatorios"
-          element={
-            <Suspense fallback={<PageLoader />}>
-              <RelatoriosPage />
-            </Suspense>
-          }
-        />
-        <Route
-          path="/fechamento"
-          element={
-            <Suspense fallback={<PageLoader />}>
-              <FechamentoPage />
-            </Suspense>
-          }
-        />
-        <Route
-          path="/configuracoes"
-          element={
-            <Suspense fallback={<PageLoader />}>
-              <ConfiguracoesPage />
-            </Suspense>
-          }
-        />
+        <Route path="/" element={<DashboardPage />} />
+        <Route path="/clientes" element={<ClientesPage />} />
+        <Route path="/pagamentos" element={<PagamentosPage />} />
+        <Route path="/recibos" element={<RecibosPage />} />
+        <Route path="/relatorios" element={<RelatoriosPage />} />
+        <Route path="/fechamento" element={<FechamentoPage />} />
+        <Route path="/configuracoes" element={<ConfiguracoesPage />} />
       </Route>
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
