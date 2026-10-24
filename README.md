@@ -151,10 +151,9 @@ src/
 │   └── ui/         # Button, Input, Select, Modal, Table, Toast...
 ├── config/         # constantes
 ├── context/        # ThemeContext, AuthContext, GalpaoContext, GalpaoDadosContext
-├── features/       # módulos por funcionalidade (auth, clientes, pagamentos, configuracoes)
+├── features/       # módulos por funcionalidade (auth, clientes, dashboard, pagamentos, fechamento, relatorios, configuracoes, verificacao)
 ├── hooks/          # useHoje, useClickOutside, useMediaQuery
 ├── lib/            # cliente Supabase e utilitários
-├── pages/          # páginas (rotas)
 ├── routes/         # rotas (carregadas sob demanda) e rota protegida
 ├── types/          # tipos do domínio
 └── utils/          # regras puras (cobranças, valores, recibo) + testes em __tests__

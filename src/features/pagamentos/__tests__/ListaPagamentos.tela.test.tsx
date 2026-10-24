@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from 'vitest'
-import { PagamentosPage } from '@/pages/PagamentosPage'
-import { RecibosPage } from '@/pages/RecibosPage'
+import { PagamentosPage } from '@/features/pagamentos/PagamentosPage'
+import { RecibosPage } from '@/features/pagamentos/RecibosPage'
 import { baixarReciboPdf } from '@/utils/reciboPdf'
 import {
   esperarTela,

@@ -1,12 +1,12 @@
 import { lazy, type ComponentType } from 'react'
 
 // Cada página vira um arquivo separado, baixado só quando visitada (ou antes, em ociosidade).
-const carregarDashboard = () => import('@/pages/DashboardPage')
+const carregarDashboard = () => import('@/features/dashboard/DashboardPage')
 const carregarClientes = () => import('@/features/clientes')
-const carregarPagamentos = () => import('@/pages/PagamentosPage')
-const carregarRecibos = () => import('@/pages/RecibosPage')
-const carregarRelatorios = () => import('@/pages/RelatoriosPage')
-const carregarFechamento = () => import('@/pages/FechamentoPage')
+const carregarPagamentos = () => import('@/features/pagamentos/PagamentosPage')
+const carregarRecibos = () => import('@/features/pagamentos/RecibosPage')
+const carregarRelatorios = () => import('@/features/relatorios/RelatoriosPage')
+const carregarFechamento = () => import('@/features/fechamento/FechamentoPage')
 const carregarConfiguracoes = () => import('@/features/configuracoes')
 
 /** Os módulos exportam a página por nome; o React.lazy espera o componente em `default`. */

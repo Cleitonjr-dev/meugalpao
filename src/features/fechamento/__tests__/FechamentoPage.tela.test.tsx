@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { FechamentoPage } from '@/pages/FechamentoPage'
+import { FechamentoPage } from '@/features/fechamento/FechamentoPage'
 import { bancoFalso } from '@/test/bancoFalso'
 import { IDS, lancarPagamento } from '@/test/dados'
 import { espiarDownload, reais, renderizarTela, screen, semNbsp, waitFor, within } from '@/test/renderizar'

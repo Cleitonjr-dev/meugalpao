@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { RelatoriosPage } from '@/pages/RelatoriosPage'
+import { RelatoriosPage } from '@/features/relatorios/RelatoriosPage'
 import { bancoFalso } from '@/test/bancoFalso'
 import { IDS, lancarPagamento } from '@/test/dados'
 import { reais, renderizarTela, screen, waitFor, within } from '@/test/renderizar'

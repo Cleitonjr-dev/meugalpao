@@ -1,5 +1,5 @@
 import { vi, describe, expect, it } from 'vitest'
-import { DashboardPage } from '@/pages/DashboardPage'
+import { DashboardPage } from '@/features/dashboard/DashboardPage'
 import {
   cartao,
   escolherOpcao,
