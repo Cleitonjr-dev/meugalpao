@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#32a7d8" />
+    <meta
+      name="description"
+      content="MeuGalpão — gestão de galpões, clientes e pagamentos."
+    />
+    <title>MeuGalpão</title>
+    <style>
+      #boot-loader {
+        position: fixed;
+        inset: 0;
+        z-index: 1000;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: var(--boot-bg, #f8fafc);
+        transition: opacity 0.4s ease;
+      }
+      #boot-loader.is-leaving {
+        opacity: 0;
+      }
+      #boot-loader .boot-logo {
+        width: 128px;
+        height: 128px;
+        animation: boot-pulse 1.4s ease-in-out infinite;
+      }
+      @keyframes boot-pulse {
+        0%,
+        100% {
+          opacity: 1;
+          transform: scale(1);
+        }
+        50% {
+          opacity: 0.55;
+          transform: scale(1.05);
+        }
+      }
+    </style>
+    <script>
+      (function () {
+        var bg = '#f8fafc'
+        var door = '#262626'
+        var dark = false
+        try {
+          var pref = localStorage.getItem('meugalpao.theme')
+          dark =
+            pref === 'dark' ||
+            ((pref === 'system' || pref === null) &&
+              window.matchMedia &&
+              window.matchMedia('(prefers-color-scheme: dark)').matches)
+          if (dark) {
+            bg = '#0f172a'
+            door = '#d9effa'
+          }
+        } catch (error) {
+          bg = '#f8fafc'
+          door = '#262626'
+        }
+        if (dark) {
+          document.documentElement.classList.add('dark')
+        }
+        document.documentElement.style.colorScheme = dark ? 'dark' : 'light'
+        document.documentElement.style.setProperty('--boot-bg', bg)
+        document.documentElement.style.setProperty('--boot-door', door)
+      })()
+    </script>
+  </head>
+  <body>
+    <div id="boot-loader">
+      <svg
+        class="boot-logo"
+        viewBox="0 0 500 500"
+        xmlns="http://www.w3.org/2000/svg"
+        aria-hidden="true"
+      >
+        <polygon points="250,140 80,210 80,360 250,360" fill="#32a7d8" />
+        <polygon points="250,140 420,210 420,360 408,360 408,219.1 250,154" fill="#32a7d8" />
+        <polygon
+          points="280,226.4 380,267.5 380,360 280,360"
+          fill="var(--boot-door, #262626)"
+        />
+      </svg>
+    </div>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

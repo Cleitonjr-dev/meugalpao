@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 500" width="100%" height="100%">
+  <!-- Estrutura esquerda -->
+  <polygon points="250,140 80,210 80,360 250,360" fill="#32a7d8" />
+  
+  <!-- Linha de contorno direita -->
+  <polygon points="250,140 420,210 420,360 408,360 408,219.1 250,154" fill="#32a7d8" />
+  
+  <!-- Abertura/Porta escura -->
+  <polygon points="280,226.4 380,267.5 380,360 280,360" fill="#262626" />
+</svg>
