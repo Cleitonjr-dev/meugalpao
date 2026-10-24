@@ -20,7 +20,7 @@ describe('ErrorBoundary', () => {
   })
 
   it('se algo quebra na tela, mostra a mensagem em vez de uma tela em branco e registra o erro', () => {
-    const console_ = vi.spyOn(console, 'error').mockImplementation(() => {})
+    const consoleErro = vi.spyOn(console, 'error').mockImplementation(() => {})
     render(
       <ErrorBoundary>
         <Quebrado />
@@ -28,7 +28,7 @@ describe('ErrorBoundary', () => {
     )
     expect(screen.getByRole('heading', { name: 'Algo deu errado' })).toBeInTheDocument()
     expect(screen.getByText(/Seus dados já salvos não foram afetados/)).toBeInTheDocument()
-    expect(console_).toHaveBeenCalledWith('Erro inesperado na interface', expect.any(Error), expect.any(String))
+    expect(consoleErro).toHaveBeenCalledWith('Erro inesperado na interface', expect.any(Error), expect.any(String))
   })
 
   it('o botão Recarregar recarrega a página', async () => {

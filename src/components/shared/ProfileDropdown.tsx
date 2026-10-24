@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import type { ChangeEvent, KeyboardEvent as ReactKeyboardEvent } from 'react'
 import { useNavigate } from 'react-router'
 import {
@@ -49,8 +49,10 @@ export function ProfileDropdown() {
 
   const { avatar, handleFile } = useUserAvatar(user?.id ?? '', profile?.avatar_url)
 
-  const getItems = () =>
-    Array.from(rootRef.current?.querySelectorAll<HTMLElement>('[role="menuitem"]') ?? [])
+  const getItems = useCallback(
+    () => Array.from(rootRef.current?.querySelectorAll<HTMLElement>('[role="menuitem"]') ?? []),
+    [],
+  )
 
   const openMenu = (focusIndex: number) => {
     setOpen(true)
@@ -62,7 +64,7 @@ export function ProfileDropdown() {
     const items = getItems()
     items[initialFocusRef.current ?? 0]?.focus()
     initialFocusRef.current = null
-  }, [open])
+  }, [open, getItems])
 
   useEffect(() => {
     if (!open) return
@@ -112,7 +114,7 @@ export function ProfileDropdown() {
       document.removeEventListener('mousedown', handleClickOutside)
       document.removeEventListener('keydown', handleKeyDown)
     }
-  }, [open])
+  }, [open, getItems])
 
   const handleTriggerKeyDown = (event: ReactKeyboardEvent<HTMLButtonElement>) => {
     if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {

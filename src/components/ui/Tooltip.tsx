@@ -25,18 +25,18 @@ export function Tooltip({ texto, children, atraso = 350 }: TooltipProps) {
   const [visivel, setVisivel] = useState(false)
   const [posicao, setPosicao] = useState<PosicaoTooltip | null>(null)
 
-  const cancelar = () => {
+  const cancelar = useCallback(() => {
     if (timer.current !== null) {
       window.clearTimeout(timer.current)
       timer.current = null
     }
-  }
+  }, [])
 
   const esconder = useCallback(() => {
     cancelar()
     setVisivel(false)
     setPosicao(null)
-  }, [])
+  }, [cancelar])
 
   const mostrarComAtraso = () => {
     cancelar()
@@ -55,6 +55,8 @@ export function Tooltip({ texto, children, atraso = 350 }: TooltipProps) {
         { width: window.innerWidth, height: window.innerHeight },
       ),
     )
+  // `texto` não é lido aqui, mas mudar o texto muda o tamanho do balão: precisa medir de novo.
+  // oxlint-disable-next-line react/exhaustive-effect-dependencies
   }, [visivel, texto])
 
   useEffect(() => {
@@ -72,7 +74,7 @@ export function Tooltip({ texto, children, atraso = 350 }: TooltipProps) {
     }
   }, [visivel, esconder])
 
-  useEffect(() => cancelar, [])
+  useEffect(() => cancelar, [cancelar])
 
   return (
     <span

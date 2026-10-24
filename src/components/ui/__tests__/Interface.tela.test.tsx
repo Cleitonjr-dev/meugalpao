@@ -439,9 +439,9 @@ describe('Avisos (Toast)', () => {
   })
 
   it('usar o aviso fora do provedor dá erro claro', () => {
-    const console_ = vi.spyOn(console, 'error').mockImplementation(() => {})
+    const consoleErro = vi.spyOn(console, 'error').mockImplementation(() => {})
     expect(() => render(<Disparo />)).toThrow(/ToastProvider/)
-    console_.mockRestore()
+    consoleErro.mockRestore()
   })
 })
 
