@@ -5,7 +5,7 @@ import { whatsappLink } from '@/utils/cobranca'
 import { baixarReciboPdf } from '@/utils/reciboPdf'
 import { useToast } from '@/components/ui/Toast'
 import { ReciboConteudo } from './ReciboConteudo'
-import type { DadosRecibo } from './recibo'
+import type { DadosRecibo } from './dadosRecibo'
 
 interface ReceiptModalProps {
   /** Recibo a exibir; null mantém o modal fechado. */

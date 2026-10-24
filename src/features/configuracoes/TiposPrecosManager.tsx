@@ -13,7 +13,7 @@ import { contarFiltros } from '@/components/ui/contarFiltros'
 import type { TableAction, TableColumn } from '@/components/ui/Table'
 import { PageLoader } from '@/components/ui/PageLoader'
 import { useToast } from '@/components/ui/Toast'
-import { formatCurrency } from '@/lib/utils'
+import { formatCurrency } from '@/utils/valor'
 import type { PrecoGalpao, TipoItem } from '@/types'
 import { TipoModal } from './TipoModal'
 import {

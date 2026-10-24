@@ -6,7 +6,7 @@ import { GalpoesManager } from './GalpoesManager'
 import { UsuariosManager } from './UsuariosManager'
 import { TiposPrecosManager } from './TiposPrecosManager'
 import { HistoricoManager } from './HistoricoManager'
-import { cn } from '@/lib/utils'
+import { cn } from '@/lib/cn'
 
 type Tab = 'galpoes' | 'usuarios' | 'precos' | 'historico'
 

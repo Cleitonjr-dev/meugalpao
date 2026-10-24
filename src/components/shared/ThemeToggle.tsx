@@ -4,7 +4,7 @@ import { useTheme, type Theme } from '@/context/ThemeContext'
 import { useClickOutside } from '@/hooks/useClickOutside'
 import { useMediaQuery } from '@/hooks/useMediaQuery'
 import { Tooltip } from '@/components/ui/Tooltip'
-import { cn } from '@/lib/utils'
+import { cn } from '@/lib/cn'
 
 export function ThemeToggle() {
   const { theme, setTheme } = useTheme()

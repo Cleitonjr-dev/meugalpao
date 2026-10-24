@@ -11,7 +11,7 @@ import {
 import type { LucideIcon } from 'lucide-react'
 import { EmptyState } from '@/components/ui/EmptyState'
 import { Tooltip } from '@/components/ui/Tooltip'
-import { cn } from '@/lib/utils'
+import { cn } from '@/lib/cn'
 
 export interface TableColumn<T> {
   key: string

@@ -1,4 +1,4 @@
-import { formatCurrency } from '@/lib/utils'
+import { formatCurrency } from '@/utils/valor'
 import { formatarDataCurta } from '@/utils/pagamentos'
 
 /** Mensagem de cobrança para o WhatsApp. `semanas` são datas ISO (saída de pendenciasCliente). */

@@ -1,8 +1,8 @@
 import { APP_NAME } from '@/config/constants'
 import { formatarNumeroRecibo } from '@/utils/recibo'
 import { formatarCodigo } from '@/utils/codigo'
-import { cn } from '@/lib/utils'
-import type { DadosRecibo } from './recibo'
+import { cn } from '@/lib/cn'
+import type { DadosRecibo } from './dadosRecibo'
 
 interface ReciboConteudoProps {
   dados: DadosRecibo

@@ -9,7 +9,7 @@ import { AuthProvider, useAuth } from '@/context/AuthContext'
 import { GalpaoProvider } from '@/context/GalpaoContext'
 import { GalpaoDadosProvider } from '@/context/GalpaoDadosContext'
 import { ToastProvider } from '@/components/ui/Toast'
-import { formatCurrency } from '@/lib/utils'
+import { formatCurrency } from '@/utils/valor'
 import { bancoFalso } from '@/test/bancoFalso'
 import { IDS, popularCenarioPadrao } from '@/test/dados'
 

@@ -3,7 +3,7 @@ import { NavLink } from 'react-router'
 import { Menu, X } from 'lucide-react'
 import { ProfileDropdown } from '@/components/shared/ProfileDropdown'
 import { Logo } from '@/components/shared/Logo'
-import { cn } from '@/lib/utils'
+import { cn } from '@/lib/cn'
 
 const NAV_ITEMS = [
   { to: '/', label: 'Cobranças', end: true },

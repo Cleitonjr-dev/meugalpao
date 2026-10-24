@@ -1,6 +1,6 @@
 import { DatePicker } from '@/components/ui/DatePicker'
 import { useLimitesPeriodo } from '@/hooks/useLimitesPeriodo'
-import { cn } from '@/lib/utils'
+import { cn } from '@/lib/cn'
 import {
   PRESETS_PERIODO,
   periodoDoPreset,

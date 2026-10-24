@@ -7,7 +7,7 @@ import { useAuth } from '@/context/AuthContext'
 import { useToast } from '@/components/ui/Toast'
 import { MINUTOS_INATIVIDADE } from '@/config/constants'
 import { useInatividade } from '@/hooks/useInatividade'
-import { cn } from '@/lib/utils'
+import { cn } from '@/lib/cn'
 
 /** Telas com tabelas de muitas colunas: usam mais da largura da tela, para não rolar para o lado. */
 const ROTAS_LARGAS = ['/pagamentos', '/recibos']

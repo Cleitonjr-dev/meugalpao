@@ -1,4 +1,4 @@
-import { formatCurrency } from '@/lib/utils'
+import { formatCurrency } from '@/utils/valor'
 import { FORMAS_PAGAMENTO_LABEL } from '@/config/constants'
 import { formatarDataBR } from '@/utils/data'
 import type { Pagamento } from '@/types'

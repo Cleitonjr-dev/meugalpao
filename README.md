@@ -153,7 +153,7 @@ src/
 ├── context/        # ThemeContext, AuthContext, GalpaoContext, GalpaoDadosContext
 ├── features/       # módulos por funcionalidade (auth, clientes, dashboard, pagamentos, fechamento, relatorios, configuracoes, verificacao)
 ├── hooks/          # useHoje, useClickOutside, useMediaQuery
-├── lib/            # cliente Supabase e utilitários
+├── lib/            # cliente Supabase, cache de dados (queryClient) e cn
 ├── routes/         # rotas (carregadas sob demanda) e rota protegida
 ├── types/          # tipos do domínio
 └── utils/          # regras puras (cobranças, valores, recibo) + testes em __tests__

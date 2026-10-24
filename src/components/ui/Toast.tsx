@@ -9,7 +9,7 @@ import {
 } from 'react'
 import type { ReactNode } from 'react'
 import { AlertTriangle, CircleCheck, CircleX, Info, X } from 'lucide-react'
-import { cn } from '@/lib/utils'
+import { cn } from '@/lib/cn'
 
 export type ToastType = 'success' | 'warning' | 'info' | 'error'
 

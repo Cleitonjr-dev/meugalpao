@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useId, useLayoutEffect, useRef, useState } from 'react'
 import type { ReactNode } from 'react'
 import { createPortal } from 'react-dom'
-import { cn } from '@/lib/utils'
+import { cn } from '@/lib/cn'
 import { calcularPosicaoTooltip, type PosicaoTooltip } from '@/components/ui/tooltipPosicao'
 
 interface TooltipProps {

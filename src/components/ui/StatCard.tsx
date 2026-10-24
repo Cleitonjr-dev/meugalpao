@@ -1,5 +1,5 @@
 import type { LucideIcon } from 'lucide-react'
-import { cn } from '@/lib/utils'
+import { cn } from '@/lib/cn'
 import { Card } from '@/components/ui/Card'
 
 export type StatTone = 'primary' | 'success' | 'warning' | 'neutral'

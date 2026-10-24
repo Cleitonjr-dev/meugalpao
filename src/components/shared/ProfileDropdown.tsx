@@ -21,7 +21,7 @@ import { UserAvatar } from '@/components/shared/UserAvatar'
 import { useUserAvatar } from '@/features/auth/hooks/useUserAvatar'
 import { Modal } from '@/components/ui/Modal'
 import { Button } from '@/components/ui/Button'
-import { cn } from '@/lib/utils'
+import { cn } from '@/lib/cn'
 
 const THEME_OPTIONS: { value: Theme; label: string; icon: LucideIcon }[] = [
   { value: 'system', label: 'Sistema', icon: Monitor },

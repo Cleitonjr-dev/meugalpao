@@ -9,7 +9,7 @@ import {
 import { Modal } from '@/components/ui/Modal'
 import { useHoje } from '@/hooks/useHoje'
 import { parseISO } from '@/utils/data'
-import { cn } from '@/lib/utils'
+import { cn } from '@/lib/cn'
 
 export interface DatePickerProps {
   label?: string

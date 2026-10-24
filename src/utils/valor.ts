@@ -65,3 +65,10 @@ export function valorExibido(precoAtual: number, pagoNaCobrancaAtual: number | n
   const mudou = Math.abs(precoAtual - pagoNaCobrancaAtual) >= 0.005
   return { valor: pagoNaCobrancaAtual, pago: true, proximas: mudou ? precoAtual : null }
 }
+
+export function formatCurrency(value: number): string {
+  return new Intl.NumberFormat('pt-BR', {
+    style: 'currency',
+    currency: 'BRL',
+  }).format(value)
+}

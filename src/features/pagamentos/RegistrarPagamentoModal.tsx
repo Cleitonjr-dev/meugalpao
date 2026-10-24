@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/Button'
 import { Input } from '@/components/ui/Input'
 import { Select } from '@/components/ui/Select'
 import { registrarPagamento } from './pagamentos.service'
-import { formatCurrency } from '@/lib/utils'
+import { formatCurrency } from '@/utils/valor'
 import { FORMAS_PAGAMENTO, FORMAS_PAGAMENTO_LABEL } from '@/config/constants'
 import { formatarValorInput, parseValorBR } from '@/utils/valor'
 import {

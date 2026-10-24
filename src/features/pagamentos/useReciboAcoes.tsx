@@ -5,7 +5,7 @@ import type { TableAction } from '@/components/ui/Table'
 import { baixarReciboPdf } from '@/utils/reciboPdf'
 import { ReceiptModal } from './ReceiptModal'
 import { ReciboConteudo } from './ReciboConteudo'
-import type { DadosRecibo } from './recibo'
+import type { DadosRecibo } from './dadosRecibo'
 
 interface UseReciboAcoes {
   /** Ações (imprimir, PDF, WhatsApp) para uma Table cujas linhas viram um DadosRecibo. */

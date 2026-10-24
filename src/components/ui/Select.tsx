@@ -3,7 +3,7 @@ import type { KeyboardEvent, ReactNode } from 'react'
 import { createPortal } from 'react-dom'
 import { Check, ChevronDown, Search } from 'lucide-react'
 import { calcularPosicaoLista, type PosicaoLista } from '@/components/ui/posicaoLista'
-import { cn } from '@/lib/utils'
+import { cn } from '@/lib/cn'
 
 export interface SelectOption {
   value: string

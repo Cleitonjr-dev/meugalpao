@@ -1,5 +1,5 @@
 import { FORMAS_PAGAMENTO_LABEL, STATUS_PAGAMENTO_LABEL } from '@/config/constants'
-import { formatDateTime } from '@/lib/utils'
+import { formatDateTime } from '@/utils/data'
 import { baixarCsv, gerarCsv, reaisCsv } from '@/utils/csv'
 import { formatarCodigo } from '@/utils/codigo'
 import { formatarDataBR } from '@/utils/data'

@@ -2,7 +2,7 @@ import type { jsPDF } from 'jspdf'
 import { APP_NAME } from '@/config/constants'
 import { formatarNumeroRecibo } from '@/utils/recibo'
 import { formatarCodigo } from '@/utils/codigo'
-import type { DadosRecibo } from '@/features/pagamentos/recibo'
+import type { DadosRecibo } from '@/features/pagamentos/dadosRecibo'
 
 const LARGURA = 80
 const MARGEM = 8

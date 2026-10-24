@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from 'vitest'
 import { baixarReciboPdf } from '@/utils/reciboPdf'
-import type { DadosRecibo } from '@/features/pagamentos/recibo'
+import type { DadosRecibo } from '@/features/pagamentos/dadosRecibo'
 
 // O jsPDF de verdade monta o PDF; só interceptamos o "salvar" (que no navegador baixa o arquivo)
 // para ficar com o nome e os bytes do documento.
