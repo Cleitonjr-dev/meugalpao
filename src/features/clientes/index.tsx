@@ -2,7 +2,6 @@ import { useMemo, useState } from 'react'
 import { Download, Pencil, Trash2 } from 'lucide-react'
 import { useGalpao } from '@/context/GalpaoContext'
 import { useGalpaoDados } from '@/context/GalpaoDadosContext'
-import { supabase } from '@/lib/supabase'
 import { Button } from '@/components/ui/Button'
 import { useGuardaPagina } from '@/components/shared/useGuardaPagina'
 import { useToast } from '@/components/ui/Toast'
@@ -12,6 +11,7 @@ import { FilterModal } from '@/components/ui/FilterModal'
 import { contarFiltros } from '@/components/ui/contarFiltros'
 import type { FilterGroup, FilterValues } from '@/components/ui/FilterModal'
 import { ClienteModal } from './ClienteModal'
+import { excluirCliente } from './clientes.service'
 import { formatCurrency } from '@/lib/utils'
 import { dataLocalISO, formatarDataBR } from '@/utils/data'
 import { filtrarClientes } from '@/utils/clientes'
@@ -114,11 +114,10 @@ export function ClientesPage() {
     ) {
       return
     }
-    const { error } = await supabase.from('clientes').delete().eq('id', cliente.id)
-    if (error) {
-      // 23503 = violação de chave estrangeira (existem pagamentos)
+    const resultado = await excluirCliente(cliente.id)
+    if (resultado !== 'ok') {
       toast.error(
-        error.code === '23503'
+        resultado === 'com-pagamentos'
           ? 'Este cliente tem pagamentos registrados e não pode ser excluído. Marque-o como inativo.'
           : 'Não foi possível excluir o cliente.',
       )

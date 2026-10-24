@@ -1,5 +1,4 @@
 import { useState, type FormEvent } from 'react'
-import { supabase } from '@/lib/supabase'
 import { Button } from '@/components/ui/Button'
 import { Input } from '@/components/ui/Input'
 import { Modal } from '@/components/ui/Modal'
@@ -8,6 +7,7 @@ import { useToast } from '@/components/ui/Toast'
 import { formatarValorInput, parseValorBR } from '@/utils/valor'
 import type { Galpao, PrecoGalpao, TipoItem } from '@/types'
 import { planejarPrecos } from './precosPorGalpao'
+import { atualizarTipo, criarTipo, gravarPrecos } from './tipos.service'
 
 const FORM_ID = 'tipo-form'
 
@@ -75,43 +75,26 @@ function TipoModalAberto({ tipo, galpoes, precos, onClose, onSaved }: ConteudoPr
     // 1) o tipo
     let tipoId = tipo?.id ?? ''
     if (tipo) {
-      const { error } = await supabase.from('tipos_item').update(dadosTipo).eq('id', tipo.id)
-      if (error) {
+      if (!(await atualizarTipo(tipo.id, dadosTipo))) {
         setSaving(false)
         toast.error('Erro ao salvar o tipo.')
         return
       }
     } else {
-      const { data, error } = await supabase
-        .from('tipos_item')
-        .insert({ ...dadosTipo, galpao_id: null })
-        .select('id')
-        .single()
-      if (error || !data) {
+      const criadoId = await criarTipo(dadosTipo)
+      if (!criadoId) {
         setSaving(false)
         toast.error('Erro ao criar o tipo.')
         return
       }
-      tipoId = (data as { id: string }).id
+      tipoId = criadoId
     }
 
     // 2) os preços próprios dos galpões
-    const resultados = await Promise.all([
-      plano.apagar.length > 0
-        ? supabase.from('precos_galpao').delete().in('id', plano.apagar)
-        : Promise.resolve({ error: null }),
-      ...plano.atualizar.map((p) =>
-        supabase.from('precos_galpao').update({ preco_semanal: p.preco_semanal }).eq('id', p.id),
-      ),
-      plano.inserir.length > 0
-        ? supabase
-            .from('precos_galpao')
-            .insert(plano.inserir.map((p) => ({ ...p, tipo_item_id: tipoId })))
-        : Promise.resolve({ error: null }),
-    ])
+    const precosOk = await gravarPrecos(plano, tipoId)
     setSaving(false)
 
-    if (resultados.some((r) => r.error)) {
+    if (!precosOk) {
       toast.error(
         'O tipo foi salvo, mas não foi possível gravar todos os preços dos galpões. Abra o tipo e confira.',
       )

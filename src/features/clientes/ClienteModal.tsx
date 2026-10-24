@@ -1,5 +1,4 @@
 import { useState, type FormEvent } from 'react'
-import { supabase } from '@/lib/supabase'
 import { useAuth } from '@/context/AuthContext'
 import { Button } from '@/components/ui/Button'
 import { Checkbox } from '@/components/ui/Checkbox'
@@ -9,6 +8,13 @@ import { Select } from '@/components/ui/Select'
 import { TITULO_SECAO } from '@/components/ui/estilos'
 import { useToast } from '@/components/ui/Toast'
 import { ItensEditor } from './ItensEditor'
+import {
+  adicionarItens,
+  ajustarQuantidades,
+  atualizarCliente,
+  criarCliente,
+  removerItens,
+} from './clientes.service'
 import {
   RASCUNHO_VAZIO,
   ajustarQuantidadeNovo,
@@ -173,26 +179,22 @@ function ClienteModalAberto({
     let alvo = clienteAtual
     let criou = false
     if (alvo) {
-      const { error } = await supabase.from('clientes').update(dados).eq('id', alvo.id)
-      if (error) return falhar('Erro ao salvar cliente.', 'Não foi possível salvar o cliente.', false)
+      if (!(await atualizarCliente(alvo.id, dados))) {
+        return falhar('Erro ao salvar cliente.', 'Não foi possível salvar o cliente.', false)
+      }
     } else {
-      const { data, error } = await supabase
-        .from('clientes')
-        .insert({ ...dados, galpao_id: galpaoId, criado_por: user?.id ?? null })
-        .select()
-        .single()
-      if (error || !data) {
+      const criado = await criarCliente(dados, galpaoId, user?.id ?? null)
+      if (!criado) {
         return falhar('Erro ao criar cliente.', 'Não foi possível criar o cliente.', false)
       }
-      alvo = data as Cliente
+      alvo = criado
       criou = true
       setClienteAtual(alvo)
     }
 
     // 2) itens removidos
     if (removidos.length > 0) {
-      const { error } = await supabase.from('itens_guardados').delete().in('id', removidos)
-      if (error) {
+      if (!(await removerItens(removidos))) {
         return falhar(
           'O cliente foi salvo, mas não foi possível remover os itens. Tente salvar de novo.',
           'Não foi possível remover os itens.',
@@ -204,16 +206,11 @@ function ClienteModalAberto({
 
     // 3) quantidade alterada em itens que já existiam
     if (idsAjuste.length > 0) {
-      const resultados = await Promise.all(
-        idsAjuste.map((id) => {
-          const base = salvos.find((i) => i.id === id)?.quantidade ?? 0
-          return supabase
-            .from('itens_guardados')
-            .update({ quantidade: base + estado.ajustes[id] })
-            .eq('id', id)
-        }),
-      )
-      if (resultados.some((r) => r.error)) {
+      const ajustesGravar = idsAjuste.map((id) => ({
+        id,
+        quantidade: (salvos.find((i) => i.id === id)?.quantidade ?? 0) + estado.ajustes[id],
+      }))
+      if (!(await ajustarQuantidades(ajustesGravar))) {
         return falhar(
           'O cliente foi salvo, mas não foi possível atualizar as quantidades. Tente salvar de novo.',
           'Não foi possível atualizar as quantidades.',
@@ -225,16 +222,7 @@ function ClienteModalAberto({
 
     // 4) itens novos
     if (paraAdicionar.length > 0) {
-      const { error } = await supabase.from('itens_guardados').insert(
-        paraAdicionar.map((item) => ({
-          cliente_id: alvo.id,
-          galpao_id: alvo.galpao_id,
-          tipo_item_id: item.tipo_item_id,
-          identificacao: item.identificacao,
-          quantidade: item.quantidade,
-        })),
-      )
-      if (error) {
+      if (!(await adicionarItens(alvo, paraAdicionar))) {
         return falhar(
           'O cliente foi salvo, mas não foi possível gravar os itens. Tente salvar de novo.',
           'Não foi possível gravar os itens.',

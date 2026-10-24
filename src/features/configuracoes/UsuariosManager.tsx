@@ -1,7 +1,6 @@
 import { useState } from 'react'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { chaves } from '@/lib/queryClient'
-import { supabase } from '@/lib/supabase'
 import { useAuth } from '@/context/AuthContext'
 import { Card } from '@/components/ui/Card'
 import { PageLoader } from '@/components/ui/PageLoader'
@@ -10,21 +9,8 @@ import { Checkbox } from '@/components/ui/Checkbox'
 import { Badge } from '@/components/ui/Badge'
 import { UserAvatar } from '@/components/shared/UserAvatar'
 import { ConfirmarSenhaModal } from '@/components/shared/ConfirmarSenhaModal'
-import type { Galpao, GalpaoMembro, Profile } from '@/types'
-
-async function buscarUsuarios() {
-  const [p, g, m] = await Promise.all([
-    supabase.from('profiles').select('*').order('nome', { ascending: true }),
-    supabase.from('galpoes').select('*').order('nome', { ascending: true }),
-    supabase.from('galpao_membros').select('*'),
-  ])
-  if (p.error || g.error || m.error) throw new Error('Erro ao carregar usuários.')
-  return {
-    profiles: (p.data as Profile[]) ?? [],
-    galpoes: (g.data as Galpao[]) ?? [],
-    membros: (m.data as GalpaoMembro[]) ?? [],
-  }
-}
+import type { Profile } from '@/types'
+import { alterarAcessoGalpao, alterarSuperUsuario, buscarUsuarios } from './usuarios.service'
 
 export function UsuariosManager() {
   const { user } = useAuth()
@@ -45,17 +31,7 @@ export function UsuariosManager() {
 
   const alternarAcesso = async (profileId: string, galpaoId: string, liberar: boolean) => {
     setMensagem(null)
-    const { error } = liberar
-      ? await supabase
-          .from('galpao_membros')
-          .insert({ profile_id: profileId, galpao_id: galpaoId })
-      : await supabase
-          .from('galpao_membros')
-          .delete()
-          .eq('profile_id', profileId)
-          .eq('galpao_id', galpaoId)
-
-    if (error) {
+    if (!(await alterarAcessoGalpao(profileId, galpaoId, liberar))) {
       setMensagem('Erro ao alterar acesso.')
       setErro(true)
       return
@@ -72,15 +48,8 @@ export function UsuariosManager() {
   const confirmarSuper = async (): Promise<string | null> => {
     if (!alterandoSuper) return null
     setMensagem(null)
-    const { error } = await supabase
-      .from('profiles')
-      .update({ is_super: alterandoSuper.isSuper })
-      .eq('id', alterandoSuper.profile.id)
-    if (error) {
-      if (error.message.includes('último super')) return 'Não é possível remover o último super usuário.'
-      if (error.message.includes('Confirme sua senha')) return error.message
-      return 'Erro ao alterar permissão.'
-    }
+    const erroSuper = await alterarSuperUsuario(alterandoSuper.profile.id, alterandoSuper.isSuper)
+    if (erroSuper) return erroSuper
     setMensagem('Permissão atualizada.')
     setErro(false)
     await carregar()

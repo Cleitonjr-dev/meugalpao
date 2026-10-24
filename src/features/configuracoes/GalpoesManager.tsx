@@ -1,7 +1,6 @@
 import { useState, type FormEvent } from 'react'
 import { useQueryClient } from '@tanstack/react-query'
 import { MapPin, Pencil, Plus, Trash2, UserCog, Users, Warehouse } from 'lucide-react'
-import { supabase } from '@/lib/supabase'
 import { chaves } from '@/lib/queryClient'
 import { useGalpao } from '@/context/GalpaoContext'
 import { Button } from '@/components/ui/Button'
@@ -14,6 +13,7 @@ import { Tooltip } from '@/components/ui/Tooltip'
 import { ConfirmarSenhaModal } from '@/components/shared/ConfirmarSenhaModal'
 import { cn } from '@/lib/utils'
 import type { Galpao } from '@/types'
+import { excluirGalpao, salvarGalpao } from './galpoes.service'
 import { useResumoGalpoes } from './useResumoGalpoes'
 
 const ICON_BTN =
@@ -70,12 +70,10 @@ export function GalpoesManager() {
     const editando = modal.kind === 'editar'
 
     setSaving(true)
-    const { error } = editando
-      ? await supabase.from('galpoes').update(dados).eq('id', modal.galpao.id)
-      : await supabase.from('galpoes').insert(dados)
+    const ok = await salvarGalpao(dados, editando ? modal.galpao.id : undefined)
     setSaving(false)
 
-    if (error) {
+    if (!ok) {
       toast.error(editando ? 'Erro ao salvar o galpão.' : 'Erro ao criar o galpão.')
       return
     }
@@ -99,11 +97,8 @@ export function GalpoesManager() {
   /** Chamada depois que a senha foi confirmada. Devolve a mensagem de erro, ou null se deu certo. */
   const confirmarExclusao = async (): Promise<string | null> => {
     if (!excluindo) return null
-    const { error } = await supabase.from('galpoes').delete().eq('id', excluindo.id)
-    if (error) {
-      // as mensagens do banco (ex.: galpão com pagamentos) já vêm em português
-      return error.code === 'P0001' ? error.message : 'Erro ao excluir o galpão.'
-    }
+    const erro = await excluirGalpao(excluindo.id)
+    if (erro) return erro
     queryClient.removeQueries({ queryKey: chaves.dados(excluindo.id) })
     toast.success('Galpão excluído.')
     atualizarTudo()

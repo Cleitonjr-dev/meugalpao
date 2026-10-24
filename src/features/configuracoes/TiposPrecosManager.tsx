@@ -1,7 +1,6 @@
 import { useMemo, useState } from 'react'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { Eye, EyeOff, Pencil, Plus, Trash2 } from 'lucide-react'
-import { supabase } from '@/lib/supabase'
 import { chaves } from '@/lib/queryClient'
 import { useGalpao } from '@/context/GalpaoContext'
 import { ErroCarregamento } from '@/components/shared/ErroCarregamento'
@@ -17,24 +16,15 @@ import { useToast } from '@/components/ui/Toast'
 import { formatCurrency } from '@/lib/utils'
 import type { PrecoGalpao, TipoItem } from '@/types'
 import { TipoModal } from './TipoModal'
+import {
+  alterarAtivoTipo,
+  buscarTipos,
+  buscarTodosOsPrecos,
+  excluirTipo as excluirTipoNoBanco,
+} from './tipos.service'
 
 /** Tipo aberto no modal (null = tipo novo); fechado quando não há modal. */
 type ModalState = { tipo: TipoItem | null } | null
-
-async function buscarTipos(): Promise<TipoItem[]> {
-  const { data, error } = await supabase
-    .from('tipos_item')
-    .select('*')
-    .order('nome', { ascending: true })
-  if (error) throw new Error(error.message)
-  return (data as TipoItem[]) ?? []
-}
-
-async function buscarTodosOsPrecos(): Promise<PrecoGalpao[]> {
-  const { data, error } = await supabase.from('precos_galpao').select('*')
-  if (error) throw new Error(error.message)
-  return (data as PrecoGalpao[]) ?? []
-}
 
 export function TiposPrecosManager() {
   const queryClient = useQueryClient()
@@ -112,10 +102,9 @@ export function TiposPrecosManager() {
     ) {
       return
     }
-    const { error } = await supabase.from('tipos_item').delete().eq('id', tipo.id)
-    if (error) {
-      // o banco recusa tipo em uso e já explica em português
-      toast.error(error.code === 'P0001' ? error.message : 'Erro ao excluir tipo.')
+    const erro = await excluirTipoNoBanco(tipo.id)
+    if (erro) {
+      toast.error(erro)
       return
     }
     toast.success('Tipo excluído.')
@@ -124,8 +113,7 @@ export function TiposPrecosManager() {
 
   // Desativar tira o tipo das opções de novos itens, sem mexer em quem já usa.
   const alternarAtivo = async (tipo: TipoItem) => {
-    const { error } = await supabase.from('tipos_item').update({ ativo: !tipo.ativo }).eq('id', tipo.id)
-    if (error) {
+    if (!(await alterarAtivoTipo(tipo.id, !tipo.ativo))) {
       toast.error('Erro ao alterar o tipo.')
       return
     }
