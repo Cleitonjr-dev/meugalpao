@@ -14,19 +14,14 @@ import { StatCard } from '@/components/ui/StatCard'
 import { Badge } from '@/components/ui/Badge'
 import { EmptyState } from '@/components/ui/EmptyState'
 import { Tooltip } from '@/components/ui/Tooltip'
-import { formatCurrency } from '@/utils/valor'
 import { formatDateLong } from '@/utils/data'
 import { cn } from '@/lib/cn'
-import { valorExibido, valorSemanal } from '@/utils/valor'
-import { diaSemanaKey } from '@/utils/periodo'
-import { dataLocalISO } from '@/utils/data'
-import { indexarPagos, situacaoCliente, formatarDataCurta, chavePagamento } from '@/utils/pagamentos'
-import { filtrarClientes } from '@/utils/clientes'
+import { formatCurrency, valorExibido } from '@/utils/valor'
+import { chavePagamento, formatarDataCurta, situacaoCliente } from '@/utils/pagamentos'
 import { DIAS_PAGAMENTO_LABEL } from '@/config/constants'
 import { useHoje } from '@/hooks/useHoje'
+import { calcularPainel, listarClientes, type FiltroPainel } from './painel'
 import type { Cliente, Pagamento, PagamentoRecente, Recibo } from '@/types'
-
-type Filtro = 'hoje' | 'atraso' | 'todos'
 
 const FILTRO_ATIVO = 'bg-primary-600 text-white'
 const FILTRO_INATIVO =
@@ -38,84 +33,31 @@ export function DashboardPage() {
   const { clientes, itens, tipos, precos, pagamentos, recarregar } = useGalpaoDados()
   const hoje = useHoje()
 
-  const [filtro, setFiltro] = useState<Filtro>('hoje')
+  const [filtro, setFiltro] = useState<FiltroPainel>('hoje')
   const [busca, setBusca] = useState('')
   const [registrarAberto, setRegistrarAberto] = useState(false)
   const [clienteInicialId, setClienteInicialId] = useState<string | null>(null)
   const [recebido, setRecebido] = useState<DadosRecibo | null>(null)
 
-  const hojeStr = dataLocalISO(hoje)
-  const diaKey = diaSemanaKey(hoje)
-
-  const pagos = useMemo(() => indexarPagos(pagamentos), [pagamentos])
-
-  const valoresSemanais = useMemo(() => {
-    const mapa = new Map<string, number>()
-    for (const c of clientes) mapa.set(c.id, valorSemanal(c.id, itens, precos, tipos))
-    return mapa
-  }, [clientes, itens, precos, tipos])
-  const getValorSemanal = (clienteId: string) => valoresSemanais.get(clienteId) ?? 0
-
-  // Pagamento válido de cada semana e o mais recente de cada cliente (lista já vem do mais novo ao mais antigo)
-  const { pagamentoDaSemana, ultimoPagamento } = useMemo(() => {
-    const porSemana = new Map<string, PagamentoRecente>()
-    const ultimo = new Map<string, PagamentoRecente>()
-    for (const p of pagamentos) {
-      if (p.status === 'cancelado') continue
-      if (p.semana_referencia) porSemana.set(chavePagamento(p.cliente_id, p.semana_referencia), p)
-      if (!ultimo.has(p.cliente_id)) ultimo.set(p.cliente_id, p)
-    }
-    return { pagamentoDaSemana: porSemana, ultimoPagamento: ultimo }
-  }, [pagamentos])
-
-  const ativos = useMemo(() => clientes.filter((c) => c.ativo), [clientes])
-
-  const situacoes = useMemo(() => {
-    const mapa = new Map<string, ReturnType<typeof situacaoCliente>>()
-    for (const c of ativos) mapa.set(c.id, situacaoCliente(c, pagos, hoje))
-    return mapa
-  }, [ativos, pagos, hoje])
-
-  const clientesHoje = useMemo(
-    () => (diaKey ? ativos.filter((c) => c.dia_pagamento === diaKey) : []),
-    [ativos, diaKey],
+  const painel = useMemo(
+    () => calcularPainel({ clientes, itens, tipos, precos, pagamentos, hoje }),
+    [clientes, itens, tipos, precos, pagamentos, hoje],
   )
-
-  const clientesEmAtraso = useMemo(
-    () => ativos.filter((c) => situacoes.get(c.id)?.status === 'em_atraso'),
-    [ativos, situacoes],
-  )
-
-  const lista = useMemo(() => {
-    const porFiltro =
-      filtro === 'hoje' ? clientesHoje : filtro === 'atraso' ? clientesEmAtraso : ativos
-    const base = filtrarClientes(porFiltro, busca)
-    // em atraso primeiro, mantendo a ordem por nome dentro de cada grupo
-    const peso = (c: Cliente) => (situacoes.get(c.id)?.status === 'em_atraso' ? 0 : 1)
-    return [...base].sort((a, b) => peso(a) - peso(b))
-  }, [filtro, busca, clientesHoje, clientesEmAtraso, ativos, situacoes])
-
-  const totalHoje = useMemo(
-    () =>
-      pagamentos
-        .filter((p) => p.data_pagamento === hojeStr && p.status !== 'cancelado')
-        .reduce((acc, p) => acc + Number(p.valor), 0),
-    [pagamentos, hojeStr],
-  )
-
-  const emAtrasoHoje = useMemo(
-    () => clientesHoje.filter((c) => situacoes.get(c.id)?.status === 'em_atraso'),
-    [clientesHoje, situacoes],
-  )
-
-  const aReceberHoje = useMemo(
-    () =>
-      emAtrasoHoje.reduce(
-        (acc, c) => acc + (valoresSemanais.get(c.id) ?? 0) * (situacoes.get(c.id)?.pendentes.length ?? 1),
-        0,
-      ),
-    [emAtrasoHoje, valoresSemanais, situacoes],
-  )
+  const {
+    diaKey,
+    pagos,
+    ativos,
+    situacoes,
+    clientesHoje,
+    clientesEmAtraso,
+    emAtrasoHoje,
+    pagamentoDaSemana,
+    ultimoPagamento,
+    totalHoje,
+    aReceberHoje,
+    valorSemanalDe: getValorSemanal,
+  } = painel
+  const lista = useMemo(() => listarClientes(painel, filtro, busca), [painel, filtro, busca])
 
   const mostrarRecibo = (cliente: Cliente, pagamento: PagamentoRecente | undefined) => {
     if (!pagamento || !galpaoSelecionado) return
@@ -198,7 +140,7 @@ export function DashboardPage() {
               ['hoje', `Hoje (${clientesHoje.length})`],
               ['atraso', `Em atraso (${clientesEmAtraso.length})`],
               ['todos', `Todos (${ativos.length})`],
-            ] as [Filtro, string][]
+            ] as [FiltroPainel, string][]
           ).map(([valor, rotulo]) => (
             <button
               key={valor}
