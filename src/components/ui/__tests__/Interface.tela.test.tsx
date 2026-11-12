@@ -1,5 +1,5 @@
 import { useRef, useState } from 'react'
-import { act, render, renderHook, screen, waitFor, within } from '@testing-library/react'
+import { act, fireEvent, render, renderHook, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { Search } from 'lucide-react'
 import { describe, expect, it, vi } from 'vitest'
@@ -487,7 +487,9 @@ describe('Dica (Tooltip)', () => {
     await u.unhover(screen.getByRole('button', { name: 'alvo' }))
     await u.hover(screen.getByRole('button', { name: 'alvo' }))
     await screen.findByRole('tooltip')
-    await u.pointer({ keys: '[MouseLeft>]', target: screen.getByRole('button', { name: 'alvo' }) })
+    // `fireEvent.mouseDown` testa só o esconder ao clicar: `userEvent.pointer` também daria foco,
+    // e no jsdom 31 o foco via mouse passa a casar `:focus-visible`, reabrindo a dica pelo onFocus.
+    fireEvent.mouseDown(screen.getByRole('button', { name: 'alvo' }))
     expect(screen.queryByRole('tooltip')).not.toBeInTheDocument()
   })
 })

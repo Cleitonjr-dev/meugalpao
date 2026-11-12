@@ -31,7 +31,7 @@ export default defineConfig({
     rolldownOptions: {
       output: {
         // Bibliotecas em arquivos próprios: o navegador as guarda em cache entre versões do app.
-        advancedChunks: {
+        codeSplitting: {
           groups: [
             { name: 'vendor-supabase', test: /node_modules[\\/]@supabase/ },
             { name: 'vendor-query', test: /node_modules[\\/]@tanstack/ },

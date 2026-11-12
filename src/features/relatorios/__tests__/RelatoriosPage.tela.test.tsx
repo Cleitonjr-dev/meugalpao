@@ -87,7 +87,8 @@ describe('Relatórios: arrecadação por dia e por forma', () => {
     ])
     const barras = dias.map((li) => (li.querySelector('div > div') as HTMLElement).style.width)
     expect(barras[1]).toBe('100%') // o maior dia
-    expect(barras[0]).toBe(`${(110 / 330) * 100}%`)
+    // o jsdom serializa porcentagens com menos casas decimais; comparar o número, não a string exata
+    expect(Number.parseFloat(barras[0])).toBeCloseTo((110 / 330) * 100)
   })
 
   it('períodos com mais de 31 dias mostram só os 31 mais recentes e avisam', async () => {
