@@ -6,6 +6,7 @@ import { useGalpao } from '@/context/GalpaoContext'
 import { ErroCarregamento } from '@/components/shared/ErroCarregamento'
 import { Badge } from '@/components/ui/Badge'
 import { Button } from '@/components/ui/Button'
+import { Modal } from '@/components/ui/Modal'
 import { Table } from '@/components/ui/Table'
 import { FilterModal } from '@/components/ui/FilterModal'
 import type { FilterGroup, FilterValues } from '@/components/ui/FilterModal'
@@ -35,6 +36,8 @@ export function TiposPrecosManager() {
   const [busca, setBusca] = useState('')
   const [filtros, setFiltros] = useState<FilterValues>({})
   const [filtroAberto, setFiltroAberto] = useState(false)
+  const [excluindo, setExcluindo] = useState<TipoItem | null>(null)
+  const [excluindoSalvando, setExcluindoSalvando] = useState(false)
 
   const tiposQuery = useQuery({ queryKey: chaves.tipos, queryFn: buscarTipos })
   const precosQuery = useQuery({ queryKey: chaves.precosTodos, queryFn: buscarTodosOsPrecos })
@@ -94,19 +97,16 @@ export function TiposPrecosManager() {
   const abrirNovoTipo = () => setModal({ tipo: null })
   const abrirEditarTipo = (tipo: TipoItem) => setModal({ tipo })
 
-  const excluirTipo = async (tipo: TipoItem) => {
-    if (
-      !window.confirm(
-        `Excluir o tipo "${tipo.nome}"? Os preços próprios dele serão apagados. Tipos em uso por clientes não podem ser excluídos: desative-os.`,
-      )
-    ) {
-      return
-    }
-    const erro = await excluirTipoNoBanco(tipo.id)
+  const confirmarExclusao = async () => {
+    if (!excluindo) return
+    setExcluindoSalvando(true)
+    const erro = await excluirTipoNoBanco(excluindo.id)
+    setExcluindoSalvando(false)
     if (erro) {
       toast.error(erro)
       return
     }
+    setExcluindo(null)
     toast.success('Tipo excluído.')
     await atualizar()
   }
@@ -177,12 +177,12 @@ export function TiposPrecosManager() {
       hidden: (t) => t.ativo,
       onClick: (t) => void alternarAtivo(t),
     },
-    { icon: Trash2, label: 'Excluir tipo', variant: 'danger', onClick: (t) => void excluirTipo(t) },
+    { icon: Trash2, label: 'Excluir tipo', variant: 'danger', onClick: (t) => setExcluindo(t) },
   ]
 
   return (
     <div className="flex flex-col gap-5">
-      <div className="flex items-start justify-between gap-3">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
         <div>
           <h2 className="text-lg font-semibold text-slate-900 dark:text-white">Tipos e preços</h2>
           <p className="text-sm text-slate-500 dark:text-slate-400">
@@ -190,7 +190,7 @@ export function TiposPrecosManager() {
             preços de todos os galpões de uma vez.
           </p>
         </div>
-        <Button variant="secondary" onClick={abrirNovoTipo} className="shrink-0">
+        <Button variant="secondary" onClick={abrirNovoTipo} className="w-full sm:w-auto">
           <Plus size={16} />
           Novo tipo
         </Button>
@@ -230,6 +230,30 @@ export function TiposPrecosManager() {
         onClose={() => setModal(null)}
         onSaved={atualizar}
       />
+
+      <Modal
+        open={excluindo !== null}
+        onClose={() => {
+          if (!excluindoSalvando) setExcluindo(null)
+        }}
+        title="Excluir tipo"
+        size="sm"
+        footer={
+          <div className="flex justify-end gap-2">
+            <Button variant="text" onClick={() => setExcluindo(null)} disabled={excluindoSalvando}>
+              Cancelar
+            </Button>
+            <Button variant="danger" onClick={() => void confirmarExclusao()} loading={excluindoSalvando}>
+              Excluir tipo
+            </Button>
+          </div>
+        }
+      >
+        <p className="text-sm text-slate-600 dark:text-slate-300">
+          Excluir o tipo <strong>{excluindo?.nome}</strong>? Os preços próprios dele serão apagados.
+          Tipos em uso por clientes não podem ser excluídos: desative-os.
+        </p>
+      </Modal>
     </div>
   )
 }

@@ -231,7 +231,7 @@ export function ListaPagamentos({ modo }: ListaPagamentosProps) {
 
   return (
     <div className="flex flex-col gap-6">
-      <div className="flex items-start justify-between gap-3">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
         <div>
           <h1 className="text-2xl font-semibold text-slate-900 dark:text-white">
             {porRecibo ? 'Recibos' : 'Pagamentos'}
@@ -242,18 +242,23 @@ export function ListaPagamentos({ modo }: ListaPagamentosProps) {
               : `Histórico de ${galpaoSelecionado.nome}`}
           </p>
         </div>
-        <div className="flex flex-wrap justify-end gap-2">
+        <div className="flex gap-2 sm:shrink-0">
           <Button
             variant="secondary"
             onClick={() => void exportar()}
             loading={exportando}
             disabled={exportando || lista.total === 0}
+            className="flex-1 sm:flex-none"
           >
             <Download size={16} />
             {exportando ? 'Exportando...' : 'Exportar'}
           </Button>
           {porRecibo && (
-            <Button variant="secondary" onClick={() => setDigitandoCodigo(true)}>
+            <Button
+              variant="secondary"
+              onClick={() => setDigitandoCodigo(true)}
+              className="flex-1 sm:flex-none"
+            >
               <ShieldCheck size={16} />
               Verificar código
             </Button>

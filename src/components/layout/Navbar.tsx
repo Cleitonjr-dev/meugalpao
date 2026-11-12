@@ -32,12 +32,12 @@ export function Navbar() {
       <div className="flex h-16 w-full items-center gap-3 px-4 sm:px-6">
         <NavLink to="/" className="flex items-center gap-2.5" onClick={() => setMenuOpen(false)}>
           <Logo className="h-10 w-auto" />
-          <span className="text-base font-semibold tracking-tight text-slate-900 dark:text-white">
+          <span className="hidden text-base font-semibold tracking-tight text-slate-900 dark:text-white min-[360px]:inline">
             MeuGalpão
           </span>
         </NavLink>
 
-        <nav className="ml-8 hidden items-center gap-1 md:flex">
+        <nav className="ml-8 hidden items-center gap-1 xl:flex">
           {NAV_ITEMS.map((item) => (
             <NavLink
               key={item.to}
@@ -56,7 +56,7 @@ export function Navbar() {
 
         <button
           type="button"
-          className="flex h-10 w-10 items-center justify-center rounded-lg text-slate-600 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800 md:hidden"
+          className="flex h-10 w-10 items-center justify-center rounded-lg text-slate-600 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800 xl:hidden"
           onClick={() => setMenuOpen((v) => !v)}
           aria-label={menuOpen ? 'Fechar menu' : 'Abrir menu'}
           aria-expanded={menuOpen}
@@ -66,7 +66,7 @@ export function Navbar() {
       </div>
 
       {menuOpen && (
-        <nav className="border-t border-slate-200 bg-white px-4 py-3 shadow-sm dark:border-slate-800 dark:bg-slate-900 md:hidden">
+        <nav className="border-t border-slate-200 bg-white px-4 py-3 shadow-sm dark:border-slate-800 dark:bg-slate-900 xl:hidden">
           <div className="flex flex-col gap-1">
             {NAV_ITEMS.map((item) => (
               <NavLink

@@ -1,4 +1,4 @@
-import { describe, expect, it, vi } from 'vitest'
+import { describe, expect, it } from 'vitest'
 import { ConfiguracoesPage } from '@/features/configuracoes'
 import { bancoFalso } from '@/test/bancoFalso'
 import { IDS, SENHA_PADRAO } from '@/test/dados'
@@ -573,18 +573,20 @@ describe('Configurações: Tipos e Preços', () => {
     })
 
     it('Excluir pergunta antes, avisando que tipo em uso não pode ser excluído', async () => {
-      vi.mocked(window.confirm).mockReturnValue(false)
       const { ui } = await abrirTabela()
       await ui.click(linhaDoTipo('Carrinho de comida').getByRole('button', { name: 'Excluir tipo' }))
-      const pergunta = vi.mocked(window.confirm).mock.calls[0][0] as string
-      expect(pergunta).toContain('Excluir o tipo "Carrinho de comida"?')
-      expect(pergunta).toContain('desative-os')
+      const dialogo = await screen.findByRole('dialog')
+      expect(within(dialogo).getByText('Carrinho de comida')).toBeInTheDocument()
+      expect(within(dialogo).getByText(/desative-os/)).toBeInTheDocument()
+      await ui.click(within(dialogo).getByRole('button', { name: 'Cancelar' }))
       expect(bancoFalso.tabelas.tipos_item.some((t) => t.id === IDS.tipoComida)).toBe(true)
     })
 
     it('tipo sem uso é excluído', async () => {
       const { ui } = await abrirTabela()
       await ui.click(linhaDoTipo('Carrinho de comida').getByRole('button', { name: 'Excluir tipo' }))
+      const dialogo = await screen.findByRole('dialog')
+      await ui.click(within(dialogo).getByRole('button', { name: 'Excluir tipo' }))
       expect(await screen.findByText('Tipo excluído.')).toBeInTheDocument()
       expect(bancoFalso.tabelas.tipos_item.some((t) => t.id === IDS.tipoComida)).toBe(false)
     })
@@ -597,6 +599,8 @@ describe('Configurações: Tipos e Preços', () => {
         { code: 'P0001' },
       )
       await ui.click(linhaDoTipo('Carro').getByRole('button', { name: 'Excluir tipo' }))
+      const dialogo = await screen.findByRole('dialog')
+      await ui.click(within(dialogo).getByRole('button', { name: 'Excluir tipo' }))
       expect(await screen.findByText(/está em uso por 1 item\(ns\) e não pode ser excluído/)).toBeInTheDocument()
       expect(bancoFalso.tabelas.tipos_item.some((t) => t.id === IDS.tipoCarro)).toBe(true)
     })
@@ -605,6 +609,8 @@ describe('Configurações: Tipos e Preços', () => {
       const { ui } = await abrirTabela()
       bancoFalso.falhar('from:tipos_item:delete', 'boom')
       await ui.click(linhaDoTipo('Carro').getByRole('button', { name: 'Excluir tipo' }))
+      const dialogo = await screen.findByRole('dialog')
+      await ui.click(within(dialogo).getByRole('button', { name: 'Excluir tipo' }))
       expect(await screen.findByText('Erro ao excluir tipo.')).toBeInTheDocument()
     })
   })

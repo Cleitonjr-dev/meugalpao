@@ -41,7 +41,7 @@ export function FiltroPeriodo({ de, ate, onChange, hoje, onLimpar }: FiltroPerio
 
   return (
     <div className="flex flex-col gap-4 rounded-lg border border-slate-200 bg-white p-4 shadow-sm dark:border-slate-700 dark:bg-slate-900 lg:flex-row lg:items-end lg:justify-between">
-      <div className="flex flex-col gap-[5px]">
+      <div className="flex flex-col gap-2">
         <div className="flex items-center justify-between gap-3">
           <span className="text-sm font-medium text-slate-900 dark:text-slate-100">Período</span>
           {onLimpar && (de || ate) && (
@@ -54,7 +54,7 @@ export function FiltroPeriodo({ de, ate, onChange, hoje, onLimpar }: FiltroPerio
             </button>
           )}
         </div>
-        <div className="flex flex-wrap gap-2">
+        <div className="grid grid-cols-2 gap-2 sm:grid-cols-4 lg:flex lg:flex-wrap">
           {PRESETS_PERIODO.map((p) => (
             <button
               key={p.valor}
@@ -62,7 +62,7 @@ export function FiltroPeriodo({ de, ate, onChange, hoje, onLimpar }: FiltroPerio
               onClick={() => escolherPreset(p.valor)}
               aria-pressed={presetAtual === p.valor}
               className={cn(
-                'rounded-lg px-3 py-1.5 text-sm font-medium transition-colors',
+                'whitespace-nowrap rounded-lg px-3 py-1.5 text-sm font-medium transition-colors',
                 presetAtual === p.valor ? CHIP_ATIVO : CHIP_INATIVO,
               )}
             >
@@ -72,7 +72,7 @@ export function FiltroPeriodo({ de, ate, onChange, hoje, onLimpar }: FiltroPerio
         </div>
       </div>
 
-      <div className="grid grid-cols-2 gap-3 sm:w-[22rem]">
+      <div className="grid grid-cols-2 gap-3 lg:w-[22rem] lg:shrink-0">
         <DatePicker
           label="De"
           value={de ?? ''}

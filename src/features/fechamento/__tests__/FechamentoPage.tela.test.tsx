@@ -197,7 +197,9 @@ describe('Fechamento do dia: exportar e imprimir', () => {
   it('a página tem a área de impressão e os botões não saem na folha', async () => {
     await abrir()
     expect(document.getElementById('fechamento-print')).not.toBeNull()
-    expect(screen.getByRole('button', { name: 'Imprimir' }).closest('div')).toHaveClass('print:hidden')
+    expect(
+      screen.getByRole('button', { name: 'Imprimir' }).closest('div[class*="print:hidden"]'),
+    ).not.toBeNull()
   })
 })
 

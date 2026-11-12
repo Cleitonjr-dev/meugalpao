@@ -53,7 +53,7 @@ export function useReciboAcoes(): UseReciboAcoes {
       {
         icon: MessageCircle,
         label: 'Enviar WhatsApp',
-        variant: 'info',
+        variant: 'success',
         onClick: (linha) => {
           const dados = resolver(linha)
           if (dados) setWhatsapp(dados)

@@ -125,12 +125,17 @@ export function DashboardPage() {
       </div>
 
       {!diaKey && (
-        <Card className="border-amber-200 bg-amber-50 p-4 dark:border-amber-900 dark:bg-amber-950">
-          <p className="text-sm text-amber-800 dark:text-amber-200">
+        <div className="flex items-start gap-3 rounded-xl border border-amber-300 bg-amber-50 p-4 shadow-sm dark:border-amber-800 dark:bg-amber-950/60">
+          <AlertTriangle
+            size={18}
+            strokeWidth={2}
+            className="mt-0.5 shrink-0 text-orange-500 dark:text-amber-400"
+          />
+          <p className="text-sm text-orange-800 dark:text-amber-200">
             Hoje não é dia de cobrança (quarta ou sábado). Você ainda pode registrar pagamentos na
             aba &quot;Todos&quot;.
           </p>
-        </Card>
+        </div>
       )}
 
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">

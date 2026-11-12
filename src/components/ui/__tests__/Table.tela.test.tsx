@@ -1,7 +1,7 @@
 import { render, screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { Pencil } from 'lucide-react'
-import { describe, expect, it, vi } from 'vitest'
+import { describe, expect, it, vi, beforeEach } from 'vitest'
 import { Table, type TableColumn } from '@/components/ui/Table'
 
 interface Linha {
@@ -157,5 +157,62 @@ describe('Tabela: o básico', () => {
     render(<Table columns={colunas} data={dados(2)} rowKey={(l) => l.id} onRowClick={abrir} />)
     await ui.click(screen.getByText('Pessoa 2'))
     expect(abrir).toHaveBeenCalledWith(expect.objectContaining({ id: 'l2' }))
+  })
+})
+
+describe('Tabela: cartões no celular/tablet', () => {
+  // Força o "navegador" das consultas de mídia a ser estreito (celular/tablet).
+  beforeEach(() => {
+    vi.spyOn(window, 'matchMedia').mockImplementation(
+      () =>
+        ({
+          matches: false,
+          media: '',
+          onchange: null,
+          addEventListener: () => {},
+          removeEventListener: () => {},
+          addListener: () => {},
+          removeListener: () => {},
+          dispatchEvent: () => false,
+        }) as unknown as MediaQueryList,
+    )
+  })
+
+  it('mostra cada linha como cartão (rótulo e valor), sem tabela', () => {
+    render(<Table columns={colunas} data={dados(2)} rowKey={(l) => l.id} />)
+    expect(screen.queryByRole('table')).not.toBeInTheDocument()
+    expect(screen.getByText('Pessoa 1')).toBeInTheDocument()
+    expect(screen.getByText('Pessoa 2')).toBeInTheDocument()
+    expect(screen.getAllByText('Valor')).toHaveLength(2) // um rótulo por cartão
+  })
+
+  it('mostra as ações como botões com rótulo e chama a linha certa', async () => {
+    const ui = userEvent.setup({ delay: null })
+    const editar = vi.fn()
+    render(
+      <Table
+        columns={colunas}
+        data={dados(1)}
+        rowKey={(l) => l.id}
+        actions={[{ icon: Pencil, label: 'Editar', onClick: editar }]}
+      />,
+    )
+    await ui.click(screen.getByRole('button', { name: 'Editar' }))
+    expect(editar).toHaveBeenCalledWith(expect.objectContaining({ id: 'l1' }))
+  })
+
+  it('mostra todas as ações, sem menu "Mais"', () => {
+    const acoes = ['A', 'B', 'C', 'D', 'E'].map((nome, i) => ({
+      icon: Pencil,
+      label: `Ação ${nome}`,
+      onClick: vi.fn(),
+      variant: (i === 4 ? 'danger' : 'default') as 'danger' | 'default',
+    }))
+    render(<Table columns={colunas} data={dados(1)} rowKey={(l) => l.id} actions={acoes} />)
+
+    for (const nome of ['A', 'B', 'C', 'D', 'E']) {
+      expect(screen.getByRole('button', { name: `Ação ${nome}` })).toBeInTheDocument()
+    }
+    expect(screen.queryByRole('button', { name: /Mais/ })).not.toBeInTheDocument()
   })
 })

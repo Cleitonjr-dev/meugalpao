@@ -275,9 +275,9 @@ export function RelatoriosPage() {
                     return (
                     <li
                       key={c.id}
-                      className="flex items-center justify-between gap-3 rounded-lg border border-slate-200 px-3 py-2 dark:border-slate-700"
+                      className="flex flex-col gap-2 rounded-lg border border-slate-200 px-3 py-2 dark:border-slate-700 sm:flex-row sm:items-center sm:justify-between sm:gap-3"
                     >
-                      <div className="min-w-0 flex-1">
+                      <div className="min-w-0 sm:flex-1">
                         <p className="truncate font-medium text-slate-900 dark:text-white">
                           {c.nome}
                         </p>
@@ -285,18 +285,22 @@ export function RelatoriosPage() {
                           {c.telefone ?? 'Sem telefone'}
                         </p>
                       </div>
-                      <Badge variant="neutral">{DIAS_PAGAMENTO_LABEL[c.dia_pagamento]}</Badge>
-                      <span className="shrink-0 text-sm font-semibold text-slate-800 dark:text-slate-100">
-                        {formatCurrency((valoresSemanais.get(c.id) ?? 0) * semanas)}
-                        {truncada ? ` (${semanas}+ semanas)` : semanas > 1 ? ` (${semanas} semanas)` : ''}
-                      </span>
-                      <BotaoCobrarWhatsapp
-                        cliente={c}
-                        galpao={galpaoSelecionado?.nome ?? ''}
-                        semanas={datas}
-                        valorSemanal={valoresSemanais.get(c.id) ?? 0}
-                        truncada={truncada}
-                      />
+                      <div className="flex flex-wrap items-center gap-2 sm:gap-3">
+                        <Badge variant="neutral">{DIAS_PAGAMENTO_LABEL[c.dia_pagamento]}</Badge>
+                        <span className="text-sm font-semibold text-slate-800 dark:text-slate-100">
+                          {formatCurrency((valoresSemanais.get(c.id) ?? 0) * semanas)}
+                          {truncada ? ` (${semanas}+ semanas)` : semanas > 1 ? ` (${semanas} semanas)` : ''}
+                        </span>
+                        <div className="ml-auto">
+                          <BotaoCobrarWhatsapp
+                            cliente={c}
+                            galpao={galpaoSelecionado?.nome ?? ''}
+                            semanas={datas}
+                            valorSemanal={valoresSemanais.get(c.id) ?? 0}
+                            truncada={truncada}
+                          />
+                        </div>
+                      </div>
                     </li>
                     )
                   })}

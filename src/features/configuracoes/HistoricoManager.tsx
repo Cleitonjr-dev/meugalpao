@@ -68,6 +68,7 @@ export function HistoricoManager() {
     {
       key: 'resumo',
       header: 'O que aconteceu',
+      stacked: true,
       render: (l) => <span className="whitespace-normal break-words">{l.resumo}</span>,
     },
   ]

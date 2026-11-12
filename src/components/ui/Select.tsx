@@ -235,7 +235,7 @@ export function Select({
                     value={search}
                     placeholder="Buscar..."
                     onChange={(event) => handleSearch(event.target.value)}
-                    className="flex-1 border-none bg-transparent py-2.5 text-sm text-slate-700 outline-hidden placeholder:text-slate-400 dark:text-slate-200 dark:placeholder:text-slate-500"
+                    className="flex-1 border-none bg-transparent py-2.5 text-base text-slate-700 outline-hidden placeholder:text-slate-400 dark:text-slate-200 dark:placeholder:text-slate-500 sm:text-sm"
                   />
                 </div>
               )}

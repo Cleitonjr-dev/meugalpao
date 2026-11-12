@@ -77,7 +77,7 @@ export function ProfileDropdown() {
           aria-label={`Menu do perfil — ${nome}`}
           onClick={() => (open ? setOpen(false) : openMenu(0))}
           onKeyDown={handleTriggerKeyDown}
-          className="rounded-full transition-all duration-150 hover:scale-105 hover:shadow-[0_0_0_3px_rgba(50,167,216,0.4)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500"
+          className="flex h-10 w-10 items-center justify-center rounded-full transition-all duration-150 hover:scale-105 hover:shadow-[0_0_0_3px_rgba(50,167,216,0.4)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500"
         >
           <UserAvatar name={nome} avatar={avatar} size={32} />
         </button>

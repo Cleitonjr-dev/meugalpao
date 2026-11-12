@@ -115,8 +115,8 @@ export function FechamentoPage() {
             {galpaoSelecionado.nome} · {formatarDataBR(data)}
           </p>
         </div>
-        <div className="flex flex-wrap items-end gap-2 print:hidden">
-          <div className="w-44">
+        <div className="flex flex-col gap-3 print:hidden sm:flex-row sm:items-end sm:gap-2">
+          <div className="w-full sm:w-44">
             <DatePicker
               label="Data"
               value={data}
@@ -126,14 +126,26 @@ export function FechamentoPage() {
               onChange={(v) => setData(v || hojeStr)}
             />
           </div>
-          <Button variant="secondary" onClick={exportar} disabled={!resumo || vazio}>
-            <Download size={16} />
-            Exportar CSV
-          </Button>
-          <Button variant="secondary" onClick={() => window.print()} disabled={!resumo}>
-            <Printer size={16} />
-            Imprimir
-          </Button>
+          <div className="grid grid-cols-2 gap-2 sm:flex">
+            <Button
+              variant="secondary"
+              onClick={exportar}
+              disabled={!resumo || vazio}
+              className="w-full sm:w-auto"
+            >
+              <Download size={16} />
+              Exportar CSV
+            </Button>
+            <Button
+              variant="secondary"
+              onClick={() => window.print()}
+              disabled={!resumo}
+              className="w-full sm:w-auto"
+            >
+              <Printer size={16} />
+              Imprimir
+            </Button>
+          </div>
         </div>
       </div>
 

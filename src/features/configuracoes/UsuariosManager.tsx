@@ -94,14 +94,16 @@ export function UsuariosManager() {
               <div className="flex items-center gap-3">
                 <UserAvatar name={p.nome || ''} avatar={p.avatar_url} size={40} />
                 <div className="min-w-0 flex-1">
-                  <p className="truncate font-medium text-slate-900 dark:text-white">
-                    {p.nome || 'Sem nome'}
-                  </p>
-                  <p className="truncate text-sm text-slate-500 dark:text-slate-400">
+                  <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
+                    <p className="truncate font-medium text-slate-900 dark:text-white">
+                      {p.nome || 'Sem nome'}
+                    </p>
+                    {p.is_super && <Badge variant="primary">Super Usuário</Badge>}
+                  </div>
+                  <p className="mt-0.5 truncate text-sm text-slate-500 dark:text-slate-400">
                     {p.email ?? 'Sem e-mail'}
                   </p>
                 </div>
-                {p.is_super && <Badge variant="primary">Super Usuário</Badge>}
               </div>
 
               <div className="mt-3 rounded-lg bg-slate-50 p-3 dark:bg-slate-900">
@@ -116,19 +118,21 @@ export function UsuariosManager() {
                     Super usuário tem acesso a todos os galpões.
                   </p>
                 ) : (
-                  <div className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-2">
+                  <div className="mt-2 flex flex-col gap-2">
                     <span className="text-xs font-semibold uppercase tracking-wide text-slate-400 dark:text-slate-500">
                       Acesso aos galpões
                     </span>
-                    {galpoes.map((g) => (
-                      <div key={g.id}>
-                        <Checkbox
-                          label={g.nome}
-                          checked={acessos.has(g.id)}
-                          onChange={(checked) => alternarAcesso(p.id, g.id, checked)}
-                        />
-                      </div>
-                    ))}
+                    <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
+                      {galpoes.map((g) => (
+                        <div key={g.id}>
+                          <Checkbox
+                            label={g.nome}
+                            checked={acessos.has(g.id)}
+                            onChange={(checked) => alternarAcesso(p.id, g.id, checked)}
+                          />
+                        </div>
+                      ))}
+                    </div>
                   </div>
                 )}
               </div>

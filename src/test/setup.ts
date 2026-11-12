@@ -12,8 +12,10 @@ vi.mock('@/lib/supabase', () => moduloSupabaseFalso())
 
 // O jsdom não implementa estas partes do navegador.
 if (typeof window !== 'undefined') {
-  window.matchMedia ??= ((consulta: string) => ({
-    matches: false,
+  // Por padrão o "navegador" dos testes é largo (desktop): consultas de largura casam.
+  // Consultas de tema (prefers-color-scheme) continuam sem casar (tema claro).
+  window.matchMedia = ((consulta: string) => ({
+    matches: consulta.includes('min-width'),
     media: consulta,
     onchange: null,
     addEventListener: () => {},

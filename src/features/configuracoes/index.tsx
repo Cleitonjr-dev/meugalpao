@@ -34,7 +34,7 @@ export function ConfiguracoesPage() {
 
   const tabClass = (t: Tab) =>
     cn(
-      'rounded-lg px-4 py-2 text-sm font-medium transition-colors',
+      'rounded-lg px-3 py-2 text-sm font-medium whitespace-nowrap transition-colors',
       tab === t
         ? 'bg-primary-600 text-white'
         : 'bg-slate-100 text-slate-700 hover:bg-slate-200 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700',
@@ -44,7 +44,7 @@ export function ConfiguracoesPage() {
     <div className="flex flex-col gap-6">
       <h1 className="text-2xl font-semibold text-slate-900 dark:text-white">Configurações</h1>
 
-      <div className="flex gap-2">
+      <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
         <button type="button" onClick={() => selecionar('galpoes')} className={tabClass('galpoes')}>
           Galpões
         </button>

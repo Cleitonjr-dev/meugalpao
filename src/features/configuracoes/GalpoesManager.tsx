@@ -17,9 +17,9 @@ import { excluirGalpao, salvarGalpao } from './galpoes.service'
 import { useResumoGalpoes } from './useResumoGalpoes'
 
 const ICON_BTN =
-  'inline-flex shrink-0 items-center justify-center rounded-md bg-transparent p-1.5 text-slate-400 transition-colors hover:bg-slate-100 hover:text-slate-900 dark:text-slate-500 dark:hover:bg-slate-800 dark:hover:text-white'
+  'inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-md bg-transparent text-slate-400 transition-colors hover:bg-slate-100 hover:text-slate-900 dark:text-slate-500 dark:hover:bg-slate-800 dark:hover:text-white'
 const ICON_BTN_DANGER =
-  'inline-flex shrink-0 items-center justify-center rounded-md bg-transparent p-1.5 text-slate-400 transition-colors hover:bg-red-50 hover:text-red-600 dark:text-slate-500 dark:hover:bg-red-950 dark:hover:text-red-400'
+  'inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-md bg-transparent text-slate-400 transition-colors hover:bg-red-50 hover:text-red-600 dark:text-slate-500 dark:hover:bg-red-950 dark:hover:text-red-400'
 
 type ModalState = { kind: 'novo' } | { kind: 'editar'; galpao: Galpao } | null
 
@@ -109,14 +109,14 @@ export function GalpoesManager() {
 
   return (
     <div className="flex flex-col gap-5">
-      <div className="flex items-start justify-between gap-3">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
         <div>
           <h2 className="text-lg font-semibold text-slate-900 dark:text-white">Galpões</h2>
           <p className="text-sm text-slate-500 dark:text-slate-400">
             Cadastre os galpões com o endereço de cada um. Renomear ou excluir também é por aqui.
           </p>
         </div>
-        <Button variant="secondary" onClick={abrirNovo} className="shrink-0">
+        <Button variant="secondary" onClick={abrirNovo} className="w-full sm:w-auto">
           <Plus size={16} />
           Novo galpão
         </Button>

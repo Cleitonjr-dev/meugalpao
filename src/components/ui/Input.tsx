@@ -46,7 +46,7 @@ export function Input({
           ref={ref}
           aria-invalid={Boolean(error)}
           className={cn(
-            'flex h-full min-w-0 flex-[1_0_0] border-none bg-transparent px-3 text-sm font-normal text-slate-700 outline-hidden placeholder:text-[13px] placeholder:text-slate-400 dark:text-slate-200 dark:placeholder:text-slate-500',
+            'flex h-full min-w-0 flex-[1_0_0] border-none bg-transparent px-3 text-base font-normal text-slate-700 outline-hidden placeholder:text-[13px] placeholder:text-slate-400 dark:text-slate-200 dark:placeholder:text-slate-500 sm:text-sm',
             className,
           )}
           {...rest}
